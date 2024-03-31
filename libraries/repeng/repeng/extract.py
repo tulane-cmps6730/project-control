@@ -68,6 +68,10 @@ class ControlVector:
         writer.write_tensors_to_file()
         writer.close()
 
+    def export_pytorch(self, path: str):
+        torch.save(self, path)
+
+
     def _helper_combine(
         self, other: "ControlVector", other_coeff: float
     ) -> "ControlVector":
