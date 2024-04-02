@@ -19,6 +19,14 @@
 \usepackage{times}
 \usepackage{latexsym}
 \renewcommand{\UrlFont}{\ttfamily\small}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+    pdftitle={Representation Engineering via Control Vectors},
+    pdfpagemode=FullScreen,
+}
 
 \usepackage{microtype}
 
@@ -27,85 +35,87 @@
 
 \newcommand\BibTeX{B\textsc{ib}\TeX}
 
-\title{Classifying news articles by partisan lean}
+\title{Representation Engineering via Control Vectors}
 
-\author{Alice Cooper \\
-  School's Out University / Detriot, MI \\
-  \texttt{email@domain} \\\And
-  Bob Seger \\
-  Night Moves U / Detroit, MI \\
-  \texttt{email@domain} \\}
+\author{Hayden Outlaw \\
+  Tulane University / New Orleans, LA \\
+  \texttt{houtlaw@tulane.edu} \\\And
+  Joe Wagner \\
+  Tulane University / New Orleans, LA \\
+  \texttt{jwagner3@tulane.edu} \\}
 
 \date{}
 
 \begin{document}
 \maketitle
-\begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-\end{abstract}
+% \begin{abstract}
+
+% \end{abstract}
 
 
-\section{Introduction}
+\section{Problem Overview}
 
-This is a skeleton latex document for you to write your report.
-
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-\section{Related Work}
-
-Citations within the text appear in parentheses as~\citep{aho1972theory} or, if the author's name appears in the text itself, as \citet{andrew2007scalable}.
+Our project demonstrates a powerful new form of representation engineering (RepE), control vectors. Given a language model, and a dichotomy of predefined traits or behaviors (honest vs dishonest, drunk vs sober, helpful vs unhelpful, verbose vs brief, etc.,), we load pre-generated control vectors, and use them to generate and alter output from an open source language model. Control vectors are one of many RepE techniques intended to increase understanding and command of large language models, which is crucial to maintaining AI safety.
 
 
+\section{Data}
+While our project is centered around pre-trained foundation models, we still require external data and code. Specifically we lean on two pre-developed libraries: the \emph{RepEng}~\cite{vogel2024repeng} library by Theia Vogel, and the \emph{RepE} ~\cite{zou2023representation} library, which both provide frameworks for generating and evaluating these control vectors on open source models. Most critically, the \emph{RepE} model contains a list of manually created objectively true and false statements, which are required for the generation of control vectors, which we will include for our own usage instead of identifying potential options from scratch.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+We also use open-source foundation models; since we require the ability to manually configure and edit the activation functions between layers, we require a model that is as basic and accessible as possible. For this, we utilize the Mistral \emph{Mistral-7B-Instruct-v0.1} model \cite{jiang2023mistral}, which is advanced enough to allow for the different behaviors we aim to isolate while still being more accessible than other commercially developed frameworks.
+
 
 
 \section{Methods}
+Similar to the concept of 'memory' cells or attention heads in transformer-based frameworks, control vectors aim to induce behavior by adding representations of concepts to layers before taking their activation function. However, this method differs in the order of operations: instead of trying to learn representations of features ahead of time, we aim to learn as accurate of a representation for a concept one single time, and then once that representation is captured, enforce behavior of this representation in future evaluations of the model without re-learning them. This allows for more overt control of the model's behavior, and is more robust and effective than additional methods for controlling model output such as prompt engineering.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Furthermore, since these vectors are representations of concepts internally within the model, they can be imposed as a linear combination for an additional degree of freedom in selecting model behavior to enforce. While theoretically an infinite number of unique control vectors could be added, at some point they have to not overpower the learned weights within the model - so when combined they are often scaled or regularized to a greater degree.
 
+\section{Experiments and Results}
 
+So far, we have successfully been able to deploy the \emph{RepEng} and \emph{RepE} libraries, and use them in generate control vectors and modified responses. We utilize the \href{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1}{Mistral-7B-Instruct-v0.1} model from HuggingFace, as it's what was originally used in \emph{Zou et al}\cite{zou2023representation}, although we might use the \href{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2}{0.2 version} that has since been launched. 
 
-\section{Results}
+We have a better understanding of the actual mechanism by which the dataset is generated, specifically regarding the the "[/INST]" tokens within Mistral models and how they allow users to pass instructions directly into the prompts without using more complicated prompt engineering techniques. Mixture of Experts models, which were the standard used in relevant research, are significantly different than the more familiar transformer models, as they contain learned gating and expert weights - however between each layer the mechanism of an activation function remains relatively similar, and so we can sidestep the more literal learning mechanism for these new models for the most part.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Overall, while the actual computation is perhaps complicated, in principle this is a very powerful concept that is relatively simple compared to the notion of attention or other additions to activation functions between layers.
 
+% Table~\ref{tab:a_table} shows a table. Note that we refer to output generated by \texttt{Experiments.ipynb}. This way, whenever we re-run our notebook, we can regenerate the paper with the latest results.
 
-Table~\ref{tab:a_table} shows a table. Note that we refer to output generated by \texttt{Experiments.ipynb}. This way, whenever we re-run our notebook, we can regenerate the paper with the latest results.
-
-\begin{table}[ht]
-\centering
+% \begin{table}[ht]
+% \centering
 % note that we can refer to tables generated by our Experiments.ipynb notbook.
-\input{../notebooks/table.tex}
-\caption{\label{tab:a_table} A caption. }
-\end{table}
-
-Figure~\ref{fig:a_label} shows a figure
-
-\begin{figure}[ht]
-	\centering
-	% note that we can refer to figures generated by our Experiments.ipynb notbook.
-	\includegraphics[width=3.5in]{../notebooks/results.pdf}
-	\caption{A caption}
-	\label{fig:a_label}
-\end{figure}
-
-\section{Discussion}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+% \input{../notebooks/table.tex}
+% \caption{\label{tab:a_table} A caption. }
+% \end{table}
 
 
-\section{Conclusion}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+\section{Related Work}
 
+\begin{enumerate}
+
+
+\item \emph{Representation Engineering: A Top-Down Approach to AI Transparency} ~\cite{zou2023representation}
+
+Zou et al's paper on representation engineering formalizes current progress in the field by prioritizing representations of higher-level concepts above neurons or activation functions for framing models. They introduce the concept of control vectors in order to extract these high-level representations of networks. The utility of control vectors is demonstrated for model analysis and AI transparency. They create control vectors using contrastive prompting and PCA, which are then added onto the activation functions to enforce behaviors, similar to our work. Whereas they focus on model interpretability 
+
+
+
+\item \emph{Towards Monosemanticity: Decomposing Language Models with Dictionary Learning} ~\cite{bricken2023towards}
+
+Bricken et al., examine language model interpretability through the lens of monosemanticity and polysemanticity - the study of how one individual neuron or unit can encode information for one or multiple embeddings as a component of a combination of other neurons. They use a sparse autoencoder to generate learned features, as opposed to principal component analysis, which is a more involved process that leans on a greater amount of prior work - however, they had relative success in using these models to extract a high proportion of monosemantic features, and in a way that was relatively model architecture agnostic.
+
+\item \emph{Activation addition: Steering language models without Optimization}~\cite{turner2023activation}
+
+Turner et al do not lean on the concept of 'representation' as much, but do propose the framework of modifying activation functions to steer or control model outputs, specifically by using contrasting prompt pairs to learn a vector, which is then injected into the activation function when multiplied by some parameter scalar.  This paper predominantly focuses on sentiment steering and improving model performance, but is much less concerned with safety, adversarial querying, and jailbreaking than Zou et al.,
+
+
+\end{enumerate}
 
 \section{Division of Labor}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Between our two backgrounds, for the time being we have decided to begin construction of the web utility and the backend code separately, and then work to join them in the middle. 
 
 
-
-
+\section{Timeline}
+Up to this point, since we have successfully compiled the library code and configured the starting model, there are a few directions in which we could proceed. We could work on expanding the different options for which representations are essentially cached for the demo for a wider variety of behaviors for the demo, or we could add support for visualization of some kind of the representation embedding of whatever behavior is selected. We could also add simultaneous generation of the responses of the contrasting vectors, or add UI support in our demo for the creation of novel control vectors based on inputs.
 
 \bibliography{references}
 \bibliographystyle{acl_natbib}
