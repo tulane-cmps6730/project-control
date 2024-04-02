@@ -8,7 +8,7 @@
 %% Based on the style files for ACL-2014, which were, in turn,
 %% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
 %% EACL-2009, IJCNLP-2008...
-%% Based on the style files for EACL 2006 by 
+%% Based on the style files for EACL 2006 by
 %%e.agirre@ehu.es or Sergi.Balari@uab.es
 %% and that of ACL 08 by Joakim Nivre and Noah Smith
 
@@ -55,13 +55,13 @@
 
 \section{Problem Overview}
 
-Our project demonstrates a powerful new form of representation engineering (RepE), control vectors. Given a language model, and a dichotomy of predefined traits or behaviors (honest vs dishonest, drunk vs sober, helpful vs unhelpful, verbose vs brief, etc.,), we load pre-generated control vectors, and use them to generate and alter output from an open source language model. Control vectors are one of many RepE techniques intended to increase understanding and command of large language models, which is crucial to maintaining AI safety.
+Our project demonstrates a powerful new form of representation engineering called control vectors. Given a language model, and a dichotomy of predefined traits or behaviors (honest vs dishonest, drunk vs sober, helpful vs unhelpful, verbose vs brief, etc.,), we load pre-generated control vectors, and use them to steer the model's output to include the representation of whatever those control vectors encode. The vectors are learned ahead of time by running contrastive prompts through the model, and then the representations of the target concept are extracted, generally using principal component analysis. Once cached, they can be added to the activation function between layers of the model to control the model's output, and can be further scaled by constants or added jointly as a sum to add multiple representations simultaneously.
 
 
 \section{Data}
 While our project is centered around pre-trained foundation models, we still require external data and code. Specifically we lean on two pre-developed libraries: the \emph{RepEng}~\cite{vogel2024repeng} library by Theia Vogel, and the \emph{RepE} ~\cite{zou2023representation} library, which both provide frameworks for generating and evaluating these control vectors on open source models. Most critically, the \emph{RepE} model contains a list of manually created objectively true and false statements, which are required for the generation of control vectors, which we will include for our own usage instead of identifying potential options from scratch.
 
-We also use open-source foundation models; since we require the ability to manually configure and edit the activation functions between layers, we require a model that is as basic and accessible as possible. For this, we utilize the Mistral \emph{Mistral-7B-Instruct-v0.1} model \cite{jiang2023mistral}, which is advanced enough to allow for the different behaviors we aim to isolate while still being more accessible than other commercially developed frameworks.
+We also use open-source foundation models; since we require the ability to manually configure and edit the activation functions between layers, we require a model that is as basic and accessible as possible. For this, we utilize the Mistral \emph{Mistral-7B-Instruct-v0.1} model \cite{jiang2023mistral}, which is advanced enough to allow for the different behaviors we aim to isolate while still being more accessible than other commercially developed frameworks. While we have access to pre-generated supplemental data required to train these specific mixture of expert models, if we were to implement this with other models such as transformers, we potentially would have to either edit or recreate them ourselves.
 
 
 
@@ -72,9 +72,9 @@ Furthermore, since these vectors are representations of concepts internally with
 
 \section{Experiments and Results}
 
-So far, we have successfully been able to deploy the \emph{RepEng} and \emph{RepE} libraries, and use them in generate control vectors and modified responses. We utilize the \href{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1}{Mistral-7B-Instruct-v0.1} model from HuggingFace, as it's what was originally used in \emph{Zou et al}\cite{zou2023representation}, although we might use the \href{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2}{0.2 version} that has since been launched. 
+So far, we have successfully been able to deploy the \emph{RepEng} and \emph{RepE} libraries, and use them in generating control vectors and modified responses. We utilize the \href{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.1}{Mistral-7B-Instruct-v0.1} model from HuggingFace, as it's what was originally used in \emph{Zou et al}\cite{zou2023representation}, although we might use the \href{https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.2}{0.2 version} that has since been launched.
 
-We have a better understanding of the actual mechanism by which the dataset is generated, specifically regarding the the "[/INST]" tokens within Mistral models and how they allow users to pass instructions directly into the prompts without using more complicated prompt engineering techniques. Mixture of Experts models, which were the standard used in relevant research, are significantly different than the more familiar transformer models, as they contain learned gating and expert weights - however between each layer the mechanism of an activation function remains relatively similar, and so we can sidestep the more literal learning mechanism for these new models for the most part.
+We have a better understanding of the actual mechanism by which the dataset is generated, specifically regarding the the "[/INST]" tokens within Mistral models and how they allow users to pass instructions directly into the prompts without using more complicated prompt engineering techniques. Mixture of Experts models, which were the standard used in relevant research, are significantly different than the more familiar transformer models, as they contain learned gating and expert weights - however between each layer the mechanism of an activation function remains relatively similar, and so we can sidestep investigating the more literal learning mechanism for these new models for the most part.
 
 Overall, while the actual computation is perhaps complicated, in principle this is a very powerful concept that is relatively simple compared to the notion of attention or other additions to activation functions between layers.
 
@@ -95,7 +95,7 @@ Overall, while the actual computation is perhaps complicated, in principle this 
 
 \item \emph{Representation Engineering: A Top-Down Approach to AI Transparency} ~\cite{zou2023representation}
 
-Zou et al's paper on representation engineering formalizes current progress in the field by prioritizing representations of higher-level concepts above neurons or activation functions for framing models. They introduce the concept of control vectors in order to extract these high-level representations of networks. The utility of control vectors is demonstrated for model analysis and AI transparency. They create control vectors using contrastive prompting and PCA, which are then added onto the activation functions to enforce behaviors, similar to our work. Whereas they focus on model interpretability 
+Zou et al's paper on representation engineering formalizes current progress in the field by prioritizing representations of higher-level concepts above neurons or activation functions for framing models. They introduce the concept of control vectors in order to extract these high-level representations of networks. The utility of control vectors is demonstrated for model analysis and AI transparency. They create control vectors using contrastive prompting and primcipal component analysis, which are then added onto the activation functions to enforce behaviors, similar to our work. Whereas they focus on model interpretability
 
 
 
@@ -107,11 +107,18 @@ Bricken et al., examine language model interpretability through the lens of mono
 
 Turner et al do not lean on the concept of 'representation' as much, but do propose the framework of modifying activation functions to steer or control model outputs, specifically by using contrasting prompt pairs to learn a vector, which is then injected into the activation function when multiplied by some parameter scalar.  This paper predominantly focuses on sentiment steering and improving model performance, but is much less concerned with safety, adversarial querying, and jailbreaking than Zou et al.,
 
+\item \emph{A Tutorial on Network Embeddings}~\cite{chen2018network}
+
+Chen et al offer an overview of different ways to extract representation embeddings from models beyond PCA. This is different than the high-level concepts we are trying to learn with control vectors, and rather focuses on the applications of low-dimensional latent node representation. Some of the methods covered include isomaps and local linear embeddings. While somewhat out of the scope of our project, the unsupervised methods are potential strategies we will explore to improve our model.
+
+\item \emph{Representation Engineering Mistral-7B an Acid Trip}~\cite{vogel2024repeng}
+
+Extends and explains the functionality of the repeng python library, which allows for easy use of control vectors with pytorch. Looks beyond the high level representation side of RepE and instead compares it to current methods including prompt engineering and fine tuning. Packaged code provided allows for generating control vectors from contrastive prompts. Whereas Vogel focuses on a wide range of applications for control vectors, our project instead hones in on giving users a variety of trained control vectors which all elicit unique responses.
 
 \end{enumerate}
 
 \section{Division of Labor}
-Between our two backgrounds, for the time being we have decided to begin construction of the web utility and the backend code separately, and then work to join them in the middle. 
+Between our two backgrounds, for the time being we have decided to begin construction of the web utility and the backend code separately, and then work to join them in the middle. Since a lot of our project involves generating and caching data ahead of time for the demo, once we have a functional framework with one or two attributes that you can select, we are essentially limited only by the amount of features we want to add and the amount of time we have to do the corresponding model inference. Once we have a functioning demo with one or two behaviors that users can select and query the model with, since most of the labor in computing the control vectors is done ahead of time and cached we can add as many control behaviors as we can devleop in the time allotted.
 
 
 \section{Timeline}
