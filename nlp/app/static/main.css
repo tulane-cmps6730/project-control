@@ -1,20 +1,88 @@
 body {
-  margin: 50px;
-  padding: 50px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #444;
-}
-/*
- * Formatting the header area
- */
-header {
-  background-color: #DFB887;
-  height: 35px;
-  width: 100%;
-  opacity: .9;
-  margin-bottom: 10px;
-}
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+  }
 
-label {
-  color: black;
-}
+  header {
+    background-color: #DFB887;
+    height: 35px;
+    width: 100%;
+    opacity: .9;
+    margin-bottom: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  label {
+    color: #333;
+    margin-right: 10px;
+  }
+
+  p.description {
+    max-width: 600px;
+    margin: 15px auto;
+    padding: 0 15px;
+    text-align: center;
+  }
+
+  /* Centering Form and Results */
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  form p {
+    margin: 20px 0;
+  }
+
+
+  input[type="text"], input[type="submit"]{
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: none;
+  }
+
+  input[type="submit"] {
+    cursor: pointer;
+    background-color: #8FBC8F;
+    color: white;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #7AA57A;
+  }
+
+  /* Styling the prediction and confidence */
+  .lead {
+    text-align: center;
+    color: #2F4F4F;
+  }
+
+  /* Improving spacing and visibility for flashed messages */
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    background-color: #FFFFE0;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    border: 1px solid #EEDD82;
+    color: #556B2F;
+  }

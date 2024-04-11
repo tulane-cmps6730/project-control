@@ -1,11 +1,32 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <b>Partisan headline classifier</b>
+    <b>Control Vector Chatbot</b>
+    <p class="description">
+        Our chatbot utilizes a pretrained generative text model, Mistral-7B-Instruct-v0.1, to generate responses to your input message.
+        You have the option to choose a control vector and corresponding magnitude to influence the chatbot's response. A control vector is a
+        vector that is applied to the activation layer during inference, and the magnitude of the control vector determines the strength of the
+        influence.
+    </p>
     <form action="" method="post" novalidate>
-        <p>
-            {{ form.input_field.label }} {{ form.input_field(size=32) }}
-        </p>
+        <div class = "form-row">
+            <div class = "form-item">
+                <p>
+                    {{ form.magnitude.label }} {{ form.magnitude() }}
+                    <span class="magnitude-range-info">Range: -3 to 3</span>
+                </p>
+            </div>
+            <div class="form-item">
+                <p>
+                    {{ form.text_options.label }} {{ form.text_options() }}
+                </p>
+            </div>
+            <div>
+                <p>
+                    {{ form.input_field.label }} {{ form.input_field() }}
+                </p>
+            </div>
+        </div>
         {{ form.submit() }}
     </form>
 {% endblock %}
