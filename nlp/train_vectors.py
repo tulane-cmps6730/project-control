@@ -6,8 +6,13 @@ from tqdm import tqdm
 import csv
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '../libraries/repeng'))) 
+
+sys.path.append(os.path.join(os.getcwd(), "../libraries/repeng"))
+
+
+
 from repeng import ControlVector, ControlModel, DatasetEntry
+
 
 
 def template(persona: str, suffix: str) -> str:
@@ -41,9 +46,10 @@ with open("./data/train_data/all_truncated_outputs.json") as f:
 
 with open(topics_path, 'r') as f:
     reader = csv.reader(f)
+    headers = next(reader)
     topics = list(reader)
     
-    # Wrap the loop with tqdm
+    # wrap the loop with tqdm
     for (synonym, antonym) in tqdm(topics, desc="Training Vectors"):
         tqdm_desc = f"Training Vector --> {synonym} | {antonym}"
         tqdm_instance = tqdm(total=len(suffixes), desc=tqdm_desc, position=1, leave=False)
@@ -65,8 +71,8 @@ with open(topics_path, 'r') as f:
                         )
                     )
 
-            tqdm_instance.update(1)
-            tqdm_instance.set_description(tqdm_desc)
+        tqdm_instance.update(1)
+        tqdm_instance.set_description(tqdm_desc)
 
         model.reset() # make sure you always reset the model before training a new vector
         control_vector = ControlVector.train(model, tokenizer, dataset)
