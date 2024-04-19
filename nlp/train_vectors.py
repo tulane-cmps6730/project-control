@@ -6,8 +6,8 @@ from tqdm import tqdm
 import csv
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-
-sys.path.append(os.path.join(os.getcwd(), "../libraries/repeng"))
+print(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), "./libraries/repeng"))
 
 
 
@@ -39,7 +39,7 @@ print(f"Model Loaded: {model_name}")
 topics_path = os.path.abspath(os.path.join(os.getcwd(), './data/topics.csv'))
 
 
-with open("./data/train_data/all_truncated_outputs.json") as f:
+with open("./nlp/data/train_data/all_truncated_outputs.json") as f:
     suffixes = json.load(f)
 
 # Load topics

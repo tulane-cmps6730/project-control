@@ -20,6 +20,15 @@ tokenizer.pad_token_id = 0
 # load model, move to dievice
 model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float16)
 model = model.to("cuda:0" if torch.cuda.is_available() else "cpu")
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+    x = torch.ones(1, device=device)
+    print (x)
+else:
+    print ("MPS device not found.")
+
+
+
 model = ControlModel(model, list(range(-5, -18, -1)))
 
 user_tag, asst_tag = "[INST]", "[/INST]"
