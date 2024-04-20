@@ -22,10 +22,8 @@ model = AutoModelForCausalLM.from_pretrained(model_name, torch_dtype=torch.float
 model = model.to("cuda:0" if torch.cuda.is_available() else "cpu")
 if torch.backends.mps.is_available():
     device = torch.device("mps")
-    x = torch.ones(1, device=device)
-    print (x)
 else:
-    print ("MPS device not found.")
+    print ("Loaded to %s", device)
 
 
 

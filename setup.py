@@ -17,8 +17,8 @@ test_requirements = ['pytest', ]
 
 
 setup(
-    author="A Student",
-    author_email='student@example.com',
+    author="Hayden Outlaw",
+    author_email='houtlaw@tulane.edu',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',

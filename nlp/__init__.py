@@ -8,6 +8,7 @@ __version__ = '0.1.0'
 
 # -*- coding: utf-8 -*-
 import configparser
+from nt import environ
 import os
 
 # ~/.nlp/nlp.cfg will contain configuration information for the project,
@@ -21,8 +22,11 @@ def write_default_config(path):
 	w.close()
 
 # Find NLP_HOME path
+
 if 'NLP_HOME' in os.environ:
     nlp_path = os.environ['NLP_HOME']
+elif 'HOMEPATH' in os.environ:
+    nlp_path = os.environ['HOMEPATH'] + os.path.sep + '.nlp' + os.path.sep
 else:
     nlp_path = os.environ['HOME'] + os.path.sep + '.nlp' + os.path.sep
 

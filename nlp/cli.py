@@ -29,7 +29,7 @@ def web(port):
     Launch the flask web app.
     """
     from .app import app
-    app.run(host='0.0.0.0', debug=True, port=port)
+    app.run(host='0.0.0.0', debug=False, port=port)
     
 @main.command('dl-data')
 def dl_data():
