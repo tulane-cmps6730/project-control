@@ -1,0 +1,14 @@
+1. gcloud init
+    - opens gcloud terminal
+2. gcloud compute ssh --zone=us-central1-f jupyter@my-fastai-instance -- -L 8080:localhost:8080
+    - connects via SSH to the NM instance
+    - if not working, check that instance is started in console
+3. http://localhost:8080/tree
+    - go to this in browser to see jupyter notebook
+4. scp -r /Users/joewagner/Documents/GitHub/2024Spring/NLP/project-control jupyter@my-fastai-instance:/home/jupyter
+
+
+ADDITIONAL HELP
+1. https://course19.fast.ai/start_gcp.html
+    - tutorial with how to get gcp instance created and running. Shouldn't ever need to run the gcp compute command since I have instance running
+
