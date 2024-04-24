@@ -84,6 +84,6 @@ def index():
 		proba = 0.5
 		# flash(input_field)
 		return render_template('myform.html', title='', form=form, 
-								prediction=control_output, confidence='%.2f' % proba)
+								default = default_output, control = control_output)
 		#return redirect('/index')
-	return render_template('myform.html', title='', form=form, prediction=None, confidence=None)
+	return render_template('myform.html', title='', form=form, default = None, control = None)
