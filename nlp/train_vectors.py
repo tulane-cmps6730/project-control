@@ -36,8 +36,8 @@ user_tag, asst_tag = "[INST]", "[/INST]"
 
 print(f"Model Loaded: {model_name}")
 
-topics_path = os.path.abspath(os.path.join(os.getcwd(), './data/topics.csv'))
-
+print(os.getcwd())
+topics_path = os.path.abspath(os.path.join(os.getcwd(), "./nlp/data/emotions.csv"))
 
 with open("./nlp/data/train_data/all_truncated_outputs.json") as f:
     suffixes = json.load(f)
@@ -77,7 +77,7 @@ with open(topics_path, 'r') as f:
         model.reset() # make sure you always reset the model before training a new vector
         control_vector = ControlVector.train(model, tokenizer, dataset)
 
-        control_vector.export_pytorch(f"./data/vectors/{synonym}_{antonym}.pt")
+        control_vector.export_pytorch(f"./nlp/data/vectors/{synonym}_{antonym}.pt")
 
 print("Training Complete, Shutting Down...")
 

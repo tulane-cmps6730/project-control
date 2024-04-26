@@ -77,11 +77,7 @@ def index():
 		control_output = str(tokenizer.decode(model.generate(**input_ids, **settings).squeeze()))
 
 		model.reset()
-		#X = vec.transform([input_field])
-		#pred = clf.predict(X)[0]
-		pred = "PRED"
 		#proba = clf.predict_proba(X)[0].max()
-		proba = 0.5
 		# flash(input_field)
 		return render_template('myform.html', title='', form=form, 
 								default = default_output, control = control_output)
