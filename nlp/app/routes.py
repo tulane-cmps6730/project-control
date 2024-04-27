@@ -96,9 +96,8 @@ def index():
 		#proba = clf.predict_proba(X)[0].max()
 		flash(input_field)
   
-		
-		default_output = "default_output"
-		control_output = "control_output"
+		default_output = default_output.split(asst_tag)[-1].replace("</s>", "").strip()
+		control_output = control_output.split(asst_tag)[-1].replace("</s>", "").strip()
 	
 		return render_template('myform.html', title='', form=form, 
 								default = default_output, control = control_output, image1 = image_path_mean, image2 = image_path_trans)
