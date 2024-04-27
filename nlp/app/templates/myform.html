@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <b>Control Vector Chatbot</b>
+    <b>Control Vector Chatbot | Tulane NLP, Spring 2024</b>
     <p class="description">
-        Our chatbot utilizes a pretrained generative text model, Mistral-7B-Instruct-v0.1, to generate responses to your input message.
-        You have the option to choose a control vector and corresponding magnitude to influence the chatbot's response. A control vector is a
-        vector that is applied to the activation layer during inference, and the magnitude of the control vector determines the strength of the
-        influence.
+        This chatbot utilizes a pretrained generative text model, Mistral-7B-Instruct-v0.1, to generate responses to your input message.
+        You have the option to choose a control vector and corresponding magnitude to influence the chatbot's response - note that negative values roughly correspond to the "opposite" behavior. 
+        This app will render the default model output, the controlled output, and visualizations of the control vector which describes the learned representation of the desired behavior.
     </p>
     <form action="" method="post" novalidate>
         <div class = "form-row">

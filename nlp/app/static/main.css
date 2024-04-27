@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    margin-top: 20px;
     padding: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #444;
@@ -86,3 +87,25 @@ body {
     border: 1px solid #EEDD82;
     color: #556B2F;
   }
+  
+  .output-box {
+    background-color: #ffffff; /* gray background */
+    padding: 20px; /* space inside the box */
+    margin-bottom: 20px; /* space below the box */
+    border-radius: 5px; /* rounded corners */
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.image-container img {
+  width: 400px; /* adjust as needed */
+}
+
+.description {
+  margin: 20px; /* adjust as needed */
+
+}

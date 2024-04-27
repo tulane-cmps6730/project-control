@@ -8,18 +8,49 @@
       <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
-        <div>Project Control: Hayden Outlaw and Joe Wagner</div>
+        <div class = "header">Project Control: Hayden Outlaw and Joe Wagner</div>
         <hr>
         {% if form.errors %}
         {{ form.errors }}
         {% endif %}
 
+
         {% block content %}{% endblock %}
-        {% if control %}
-        <p class="lead my-4" style="color: blue">
-           Default Output = {{ default }}  <br> Controlled Output = {{ control }}
-        </p>
+
+        {% if image1 and image2 %}
+        <div class="image-container">
+            <img src="{{ image1 }}" alt="Average CV Values">
+            <img src="{{ image2 }}" alt="Average CV Magnitudes">
+        </div>
         {% endif %}
+        {% if control %}
+        <div class="output-box">
+            <p class="lead my-4" style="color: blue">
+               Default Output = {{ default }}
+            </p>
+        </div>
+        <div class="output-box">
+            <p class="lead my-4" style="color: blue">
+               Controlled Output = {{ control }}
+            </p>
+        </div>
+        {% endif %}
+
+        <div class="description">
+            <p>
+                <b> What's going on? </b><br>
+                The selected options are cached representations of a specific desired behavior - which are generated through repeatedly querying the original model against a list of contrastive prompts that include whatever attribute we desire.
+                Instead of adding this behavior to the input in the prompt, or re-learning it through training, we can simply add the control vector to the activation function in each layer of the model, which is a more robust and effective way
+                of steering output.<br>
+                
+                The images shown are two representations of the control vector - which is a list of individual vectors, one for each layer of the model. The first image is the average control vector at each layer - which shows how the activation function
+                is on average changed at each step. The second image is the average magnitude of the control vector at each layer. While the differences are small, you can see the how much this transformation alters the model between different layers (think left to right for a forward pass). <br>
+
+                Inspired by Thelia Vogel, and built using their <a href="https://github.com/vgel/repeng"> repeng </a> library. Project source code is available <a href="https://github.com/tulane-cmps6730/project-control">here</a>.
+            </p>
+        </div>
+
+
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>
@@ -30,5 +61,7 @@
         {% endif %}
         {% endwith %}
         <br>
+
+
     </body>
 </html>
